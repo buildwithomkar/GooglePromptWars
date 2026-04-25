@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
 import LearningHub from './pages/LearningHub';
@@ -12,32 +12,21 @@ export default function App() {
   const [quizData, setQuizData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Persistence (optional but helpful)
-  useEffect(() => {
-    const saved = localStorage.getItem('lumen_active_topic');
-    if (saved) setCurrentTopic(saved);
-  }, []);
-
   const startLearning = async (topic) => {
     setIsLoading(true);
     setCurrentTopic(topic);
-    localStorage.setItem('lumen_active_topic', topic);
-    
     try {
       const response = await fetch('/api/lesson', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ topic })
       });
-      
-      if (!response.ok) throw new Error('Generation failed');
-      
       const data = await response.json();
       setLessonData(data);
       setActivePage('learning');
     } catch (err) {
       console.error(err);
-      alert("Failed to generate lesson. Please try again.");
+      alert("AI failed to generate lesson. Please check your connection.");
     } finally {
       setIsLoading(false);
     }
@@ -65,23 +54,30 @@ export default function App() {
   };
 
   return (
-    <div className="layout">
+    <div className="app-layout">
       <Sidebar activePage={activePage} onPageChange={setActivePage} />
       
-      <main className="content-wrapper">
+      <main className="main-container">
         {isLoading && (
-          <div className="fixed inset-0 bg-white/90 backdrop-blur-md z-[100] flex flex-col items-center justify-center">
-            <div className="w-16 h-16 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mb-6"></div>
-            <p className="text-xl font-bold text-slate-800 animate-pulse">Lumen AI is curating your module...</p>
-            <p className="text-slate-400 mt-2">Connecting to Gemini 1.5 Flash</p>
+          <div style={{ position: 'fixed', inset: 0, background: 'rgba(255,255,255,0.9)', zIndex: 1000, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ width: '50px', height: '50px', border: '4px solid #2D5BFF', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
+            <p style={{ marginTop: '1.5rem', fontWeight: '700', color: '#1E293B' }}>Lumen AI is curating your path...</p>
+            <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
           </div>
         )}
 
-        <div className="animate-fade-in">
+        <div className="animate-slide-up">
           {activePage === 'dashboard' && <Dashboard onStart={startLearning} />}
           {activePage === 'learning' && <LearningHub lesson={lessonData} onPractice={startPractice} />}
           {activePage === 'practice' && <Practice quiz={quizData} onComplete={() => setActivePage('dashboard')} />}
           {activePage === 'map' && <KnowledgeMap currentTopic={currentTopic} />}
+          
+          {(activePage === 'assessments') && (
+            <div style={{ textAlign: 'center', marginTop: '10rem', opacity: 0.5 }}>
+               <h2 className="h-lg">Coming Soon</h2>
+               <p>The Assessments module is currently being finalized.</p>
+            </div>
+          )}
         </div>
       </main>
     </div>
