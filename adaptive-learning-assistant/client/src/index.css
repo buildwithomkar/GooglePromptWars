@@ -20,8 +20,8 @@
 
 body {
   font-family: 'Inter', sans-serif;
-  background-color: var(--bg-main);
-  color: var(--text-main);
+  background-color: #F8FAFC !important;
+  color: #0F172A;
   line-height: 1.5;
 }
 
@@ -29,24 +29,27 @@ body {
 .app-layout {
   display: flex;
   min-height: 100vh;
+  background-color: #F8FAFC !important;
 }
 
 .sidebar {
   width: 280px;
-  background: var(--bg-sidebar);
-  border-right: 1px solid var(--border);
+  background: #FFFFFF !important;
+  border-right: 1px solid #E2E8F0;
   padding: 2.5rem 1.5rem;
   position: fixed;
   height: 100vh;
   display: flex;
   flex-direction: column;
+  z-index: 100;
 }
 
 .main-container {
   flex: 1;
   margin-left: 280px;
   padding: 3rem 5rem;
-  max-width: 1400px;
+  min-height: 100vh;
+  background-color: #F8FAFC !important;
 }
 
 /* Logo */
