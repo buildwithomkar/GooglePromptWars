@@ -1,0 +1,23 @@
+:root {
+  --bg: #020617;
+  --glass: rgba(30, 41, 59, 0.7);
+  --primary: #6366f1;
+}
+
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background-color: var(--bg);
+  color: white;
+}
+
+.glass {
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+}
+
+.prose { line-height: 1.6; }
+.prose h1, .prose h2 { color: #38bdf8; margin-bottom: 1rem; }
+.prose code { background: rgba(255,255,255,0.1); padding: 2px 4px; border-radius: 4px; }
